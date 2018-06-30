@@ -1,6 +1,4 @@
-<%@ page import="ru.javawebinar.topjava.model.MealWithExceed" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="ru.javawebinar.topjava.model.MealWithExceedUI" %><%--
   Created by IntelliJ IDEA.
   User: a.beloglazov

@@ -2,22 +2,16 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.controller.Controller;
-import ru.javawebinar.topjava.dao.memorydao.DataSourceInit;
-import ru.javawebinar.topjava.dao.objectsdao.MealFactoryDAO;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.model.MealWithExceedUI;
 import ru.javawebinar.topjava.util.MealsUtil;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealsServlet extends HttpServlet {
