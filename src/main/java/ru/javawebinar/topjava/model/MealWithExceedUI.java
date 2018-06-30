@@ -14,7 +14,7 @@ public class MealWithExceedUI {
         this.dateTime = mealWithExceed.getDateTime().toString().replace("T", " ");
         this.description = mealWithExceed.getDescription();
         this.calories = String.valueOf(mealWithExceed.getCalories());
-        this.exceedColor = mealWithExceed.isExceed() ? "red" : "green";
+        this.exceedColor = mealWithExceed.isExceed() ? "red" : "greenyellow";
     }
 
     public String getDateTime() {
