@@ -1,10 +1,14 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.controller.Controller;
+import ru.javawebinar.topjava.dao.memorydao.DataSourceInit;
+import ru.javawebinar.topjava.dao.objectsdao.MealFactoryDAO;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.model.MealWithExceedUI;
 import ru.javawebinar.topjava.util.MealsUtil;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
@@ -20,18 +24,14 @@ public class MealsServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
 
     List<Meal> meals;
+    private Controller controller;
 
     @Override
     public void init() {
-        log.info("Инициализация");
-        meals = Arrays.asList(
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
-                             );
+        log.info("Initialization");
+        controller = new Controller();
+        meals = controller.getMealFactory().factoryMethod().getAll();
+        meals.forEach(x -> System.out.println(x.getCalories()));
     }
 
     @Override
@@ -43,8 +43,6 @@ public class MealsServlet extends HttpServlet {
         List<MealWithExceedUI> mealsWithExceeded = getMealsWithExceededMap(meals);
 
         req.setAttribute("meals", mealsWithExceeded);
-        req.setCharacterEncoding("UTF-8");
-        res.setCharacterEncoding("UTF-8");
 
         dispatcher = context.getRequestDispatcher("/meals.jsp");
         dispatcher.include(req, res);
