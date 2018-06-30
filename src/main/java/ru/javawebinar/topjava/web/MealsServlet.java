@@ -3,8 +3,8 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
+import ru.javawebinar.topjava.model.MealWithExceedUI;
 import ru.javawebinar.topjava.util.MealsUtil;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import java.io.IOException;
@@ -36,11 +36,11 @@ public class MealsServlet extends HttpServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        log.debug("Send meas to jsp");
+        log.debug("Send meals to jsp");
         ServletContext context = this.getServletContext();
         RequestDispatcher dispatcher;
 
-        Map<String, MealWithExceed> mealsWithExceeded = getMealsWithExceededMap(meals);
+        List<MealWithExceedUI> mealsWithExceeded = getMealsWithExceededMap(meals);
 
         req.setAttribute("meals", mealsWithExceeded);
         req.setCharacterEncoding("UTF-8");
@@ -58,8 +58,10 @@ public class MealsServlet extends HttpServlet {
         return meals.stream().map(x -> MealsUtil.createWithExceed(x, caloriesSumByDate.get(x.getDate()) > CALORIES_LIMIT)).collect(Collectors.toList());
     }
 
-    private static Map<String, MealWithExceed> getMealsWithExceededMap(List<Meal> meals) {
-        log.debug("Get map of meals with exceed");
-        return mapMealsToMealsWithExceed(meals).stream().collect(Collectors.toMap(x -> x.getDateTime().toString().replace("T", " "), x -> x));
+    private static List<MealWithExceedUI> getMealsWithExceededMap(List<Meal> meals) {
+        log.debug("Get meals with exceed for UI");
+        List<MealWithExceedUI> ui = new ArrayList<>();
+        mapMealsToMealsWithExceed(meals).forEach(meal -> ui.add(new MealWithExceedUI(meal)));
+        return ui;
     }
 }

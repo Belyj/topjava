@@ -1,6 +1,7 @@
 <%@ page import="ru.javawebinar.topjava.model.MealWithExceed" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %><%--
+<%@ page import="java.util.Map" %>
+<%@ page import="ru.javawebinar.topjava.model.MealWithExceedUI" %><%--
   Created by IntelliJ IDEA.
   User: a.beloglazov
   Date: 30.06.2018
@@ -23,13 +24,18 @@
     <th>Calories</th>
     </thead>
     <%
-        Map<String, MealWithExceed> meals = (Map<String, MealWithExceed>) request.getAttribute("meals");
-        for (Map.Entry<String, MealWithExceed> m : meals.entrySet()) {%>
-    <tr bgcolor="aqua">
-        <td><%=m.getKey()%></td>
-        <td><%=m.getValue().getDescription()%></td>
-        <td><%=m.getValue().getCalories()%>
-        <td><%=m.getValue().isExceed()%></td>
+        List<MealWithExceedUI> meals = (List<MealWithExceedUI>) request.getAttribute("meals");
+        for (MealWithExceedUI m : meals) {%>
+    <tr bgcolor="<%=m.getExceedColor()%>">
+        <td>
+            <%=m.getDateTime()%>
+        </td>
+        <td>
+            <%=m.getDescription()%>
+        </td>
+        <td>
+            <%=m.getCalories()%>
+        </td>
     </tr>
     <%}%>
 </table>
