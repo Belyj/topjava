@@ -1,12 +1,11 @@
-<%@ page import="java.util.List" %>
-<%@ page import="ru.javawebinar.topjava.model.MealWithExceedUI" %><%--
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
   Created by IntelliJ IDEA.
   User: a.beloglazov
   Date: 30.06.2018
   Time: 17:13
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Meals</title>
@@ -21,21 +20,17 @@
     <th>Description</th>
     <th>Calories</th>
     </thead>
-    <%
-        List<MealWithExceedUI> meals = (List<MealWithExceedUI>) request.getAttribute("meals");
-        for (MealWithExceedUI m : meals) {%>
-    <tr bgcolor="<%=m.getExceedColor()%>">
-        <td>
-            <%=m.getDateTime()%>
-        </td>
-        <td>
-            <%=m.getDescription()%>
-        </td>
-        <td>
-            <%=m.getCalories()%>
-        </td>
-    </tr>
-    <%}%>
+
+    RequestDispatcher rd = request.getRequestDispatcher(dispatcherUrl);
+    rd.forward(request, response);
+
+    <c:forEach items="${meals}" var="m" >
+        <tr bgcolor="${m.getExceedColor()}">
+            <td>${m.getDateTime()}</td>
+            <td>${m.getDescription()}</td>
+            <td>${m.getCalories()}</td>
+        </tr>
+    </c:forEach>
 </table>
 </body>
 </html>

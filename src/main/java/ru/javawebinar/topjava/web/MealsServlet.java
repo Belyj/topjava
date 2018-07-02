@@ -25,7 +25,6 @@ public class MealsServlet extends HttpServlet {
         log.info("Initialization");
         controller = new Controller();
         meals = controller.getMealFactory().factoryMethod().getAll();
-        meals.forEach(x -> System.out.println(x.getCalories()));
     }
 
     @Override
