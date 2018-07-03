@@ -30,14 +30,14 @@ public class MealsServlet extends HttpServlet {
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         log.debug("Send meals to jsp");
-        ServletContext context = this.getServletContext();
         RequestDispatcher dispatcher;
+        req.setCharacterEncoding("UTF-8");
+        res.setCharacterEncoding("UTF-8");
 
         List<MealWithExceedUI> mealsWithExceeded = getMealsWithExceededMap(meals);
-
         req.setAttribute("meals", mealsWithExceeded);
 
-        dispatcher = context.getRequestDispatcher("/meals.jsp");
+        dispatcher = req.getRequestDispatcher("/meals.jsp");
         dispatcher.include(req, res);
     }
 
