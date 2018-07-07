@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class InMemoryMealRepositoryImpl implements MealRepository {
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
@@ -31,21 +32,24 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void delete(int id) {
-        repository.remove(id);
+    public void delete(int id, User user) {
+        if (repository.get(id) != null && repository.get(id).getUserId().equals(user.getId())) {
+            repository.remove(id);
+        } else throw new NotFoundException(String.format("Meal with id = %s does not exist", id));
     }
 
     @Override
     public Meal get(int id, User user) {
-        if (repository.get(id).getUserId().equals(user.getId())) {
+        if ( repository.get(id) != null && repository.get(id).getUserId().equals(user.getId())) {
             return repository.get(id);
         }
-        throw new NotFoundException("Meal with this ID does not exist");
+        return null;
+//        throw new NotFoundException("Meal with this ID does not exist");
     }
 
     @Override
-    public Collection<Meal> getAll() {
-        return repository.values();
+    public Collection<Meal> getAll(User user) {
+        return repository.values().stream().filter(x -> x.getUserId().equals(user.getId())).sorted((m, m2) -> m2.getDate().compareTo(m.getDate())).collect(Collectors.toList());
     }
 }
 

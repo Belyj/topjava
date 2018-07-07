@@ -8,9 +8,9 @@ import java.util.Collection;
 public interface MealRepository {
     Meal save(Meal meal);
 
-    void delete(int id);
+    void delete(int id, User user);
 
     Meal get(int id, User user);
 
-    Collection<Meal> getAll();
+    Collection<Meal> getAll(User user);
 }
