@@ -8,7 +8,9 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.ProfileRestController;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,18 +25,16 @@ import java.util.Objects;
 @WebServlet(value = "/meals")
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    //    private User user = new ProfileRestController().get();
+    private User u = new ProfileRestController().get();
     private User user = new User(1, "Al", "al@mail.ru", "1234", Role.ROLE_USER);
 
-    private MealRepository repository;
+    private MealRestController controller;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("==========");
-        System.out.println(user.getId());
-        System.out.println("==========");
-        repository = new InMemoryMealRepositoryImpl();
+//        repository = new InMemoryMealRepositoryImpl();
+        controller = new MealRestController();
     }
 
     @Override
@@ -43,12 +43,12 @@ public class MealServlet extends HttpServlet {
         String id = request.getParameter("id");
 
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.parseInt(request.getParameter("calories")));
+                             LocalDateTime.parse(request.getParameter("dateTime")),
+                             request.getParameter("description"),
+                             Integer.parseInt(request.getParameter("calories")));
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        repository.save(meal);
+        controller.save(meal);
         response.sendRedirect("meals");
     }
 
@@ -60,14 +60,16 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 int id = getId(request);
                 log.info("Delete {}", id);
-                repository.delete(id, user);
+                controller.delete(id, user.getId());
                 response.sendRedirect("meals");
                 break;
             case "create":
+                controller.create(new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, user.getId()), user.getId());
+                break;
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, user.getId()) :
-                        repository.get(getId(request), user);
+                        controller.update(meal, user.getId());
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
@@ -75,7 +77,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getWithExceeded(repository.getAll(user), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                                     MealsUtil.getWithExceeded(controller.getAll(user.getId()), MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
