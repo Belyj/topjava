@@ -1,8 +1,10 @@
 package ru.javawebinar.topjava.repository.mock;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collection;
 import java.util.Map;
@@ -34,8 +36,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal get(int id) {
-        return repository.get(id);
+    public Meal get(int id, User user) {
+        if (repository.get(id).getUserId().equals(user.getId())) {
+            return repository.get(id);
+        }
+        throw new NotFoundException("Meal with this ID does not exist");
     }
 
     @Override
