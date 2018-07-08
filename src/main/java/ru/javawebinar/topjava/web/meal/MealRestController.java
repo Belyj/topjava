@@ -38,7 +38,6 @@ public class MealRestController {
     }
 
     public void delete(int mealId) {
-        int i = 0;
         if (service.getRepository().get(mealId) != null) {
             service.delete(mealId);
             return;
@@ -47,7 +46,6 @@ public class MealRestController {
     }
 
     public List<Meal> getAll(int userId) {
-        int i = 0;
         return service.getAll().stream().filter(x -> x.getUserId() == userId).collect(Collectors.toList());
     }
 }
