@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.MealServiceImpl;
@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Controller
 public class MealRestController {
 //    User user = new ProfileRestController().get();
     private MealService service;
