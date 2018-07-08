@@ -32,24 +32,19 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void delete(int id, User user) {
-        if (repository.get(id) != null && repository.get(id).getUserId().equals(user.getId())) {
+    public void delete(int id) {
             repository.remove(id);
-        } else throw new NotFoundException(String.format("Meal with id = %s does not exist", id));
     }
 
     @Override
-    public Meal get(int id, User user) {
-        if ( repository.get(id) != null && repository.get(id).getUserId().equals(user.getId())) {
-            return repository.get(id);
-        }
-        return null;
+    public Meal get(int id) {
+        return repository.get(id);
 //        throw new NotFoundException("Meal with this ID does not exist");
     }
 
     @Override
-    public Collection<Meal> getAll(User user) {
-        return repository.values().stream().filter(x -> x.getUserId().equals(user.getId())).sorted((m, m2) -> m2.getDate().compareTo(m.getDate())).collect(Collectors.toList());
+    public Collection<Meal> getAll() {
+        return repository.values();
     }
 }
 

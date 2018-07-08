@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MealServiceImpl implements MealService {
 
@@ -18,6 +16,14 @@ public class MealServiceImpl implements MealService {
         this.repository = repository;
     }
 
+    public MealRepository getRepository() {
+        return repository;
+    }
+
+    @Override
+    public Meal get(int id) {
+        return repository.get(id);
+    }
 
     @Override
     public void save(Meal meal) {
