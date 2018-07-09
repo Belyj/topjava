@@ -7,6 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -28,7 +29,9 @@ import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    private User user = new User(1, "Al", "al@mail.ru", "1234", Role.ROLE_USER);
+//    private User user = SecurityUtil.authUserId();
+//            new User(1, "Al", "al@mail.ru", "1234", Role.ROLE_USER);
+    private int userId = SecurityUtil.authUserId();
 
     private MealRestController controller;
 
@@ -37,7 +40,7 @@ public class MealServlet extends HttpServlet {
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             controller = appCtx.getBean(MealRestController.class);
-            controller.getAll(user.getId());
+            controller.getAll(userId);
         }
         super.init(config);
     }
@@ -64,7 +67,7 @@ public class MealServlet extends HttpServlet {
             Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                                  LocalDateTime.parse(request.getParameter("dateTime")),
                                  request.getParameter("description"),
-                                 Integer.parseInt(request.getParameter("calories")), user.getId());
+                                 Integer.parseInt(request.getParameter("calories")), userId);
 
             log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
             controller.save(meal);
@@ -76,7 +79,7 @@ public class MealServlet extends HttpServlet {
 
     private List<MealWithExceed> buttonFilter(String fromDate, String toDate, String fromTime, String toTime) {
 
-        List<MealWithExceed> mealWithExceeds = MealsUtil.getWithExceeded(controller.getAll(user.getId()),
+        List<MealWithExceed> mealWithExceeds = MealsUtil.getWithExceeded(controller.getAll(userId),
                                                          MealsUtil.DEFAULT_CALORIES_PER_DAY);
         if (fromDate != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
@@ -113,10 +116,10 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
                 break;
             case "create":
-                controller.create(new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, user.getId()));
+                controller.create(new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, userId));
                 break;
             case "update":
-                Meal meal = controller.get(getId(request), user.getId());
+                Meal meal = controller.get(getId(request), userId);
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
@@ -124,7 +127,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                                     MealsUtil.getWithExceeded(controller.getAll(user.getId()),
+                                     MealsUtil.getWithExceeded(controller.getAll(userId),
                                                                MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
         }
