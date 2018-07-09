@@ -2,10 +2,8 @@ package ru.javawebinar.topjava.repository.mock;
 
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collection;
 import java.util.Map;

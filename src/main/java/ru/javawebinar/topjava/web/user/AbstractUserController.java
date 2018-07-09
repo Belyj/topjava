@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.service.UserService;
+import ru.javawebinar.topjava.service.UserServiceImpl;
 
 import java.util.List;
 
@@ -17,6 +19,10 @@ public abstract class AbstractUserController {
 
     @Autowired
     private UserService service;
+
+    AbstractUserController() {
+        service = new UserServiceImpl(new InMemoryUserRepositoryImpl());
+    }
 
     public List<User> getAll() {
         log.info("getAll");

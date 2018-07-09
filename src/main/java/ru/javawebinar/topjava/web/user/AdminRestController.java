@@ -2,21 +2,11 @@ package ru.javawebinar.topjava.web.user;
 
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
-import ru.javawebinar.topjava.service.UserService;
-import ru.javawebinar.topjava.service.UserServiceImpl;
 
 import java.util.List;
 
 @Controller
 public class AdminRestController extends AbstractUserController {
-
-
-    private UserService service;
-
-    AdminRestController() {
-        service = new UserServiceImpl(new InMemoryUserRepositoryImpl());
-    }
 
     @Override
     public List<User> getAll() {
