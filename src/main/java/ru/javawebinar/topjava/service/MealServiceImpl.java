@@ -16,10 +16,6 @@ public class MealServiceImpl implements MealService {
         this.repository = repository;
     }
 
-    public MealRepository getRepository() {
-        return repository;
-    }
-
     @Override
     public Meal get(int id) {
         return repository.get(id);

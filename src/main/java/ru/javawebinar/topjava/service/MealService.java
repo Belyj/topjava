@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface MealService {
 
-    MealRepository getRepository();
-
     Meal get(int id);
 
     void save(Meal meal);
