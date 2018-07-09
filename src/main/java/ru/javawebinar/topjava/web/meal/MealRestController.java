@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Controller
 public class MealRestController {
-//    User user = new ProfileRestController().get();
+
     private MealService service;
 
     public MealRestController() {
@@ -19,7 +19,7 @@ public class MealRestController {
     }
 
     public Meal get(int id, int userId) {
-        if (service.getRepository().get(id) != null && service.getRepository().get(id).getUserId() == userId) {
+        if (service.get(id) != null && service.get(id).getUserId() == userId) {
             return service.get(id);
         }
         throw new NotFoundException(String.format("Meal with id = %s does not exist", id));
@@ -38,7 +38,7 @@ public class MealRestController {
     }
 
     public void delete(int mealId) {
-        if (service.getRepository().get(mealId) != null) {
+        if (service.get(mealId) != null) {
             service.delete(mealId);
             return;
         }

@@ -29,7 +29,7 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    private User user = new ProfileRestController().get(SecurityUtil.authUserId());
+    private User user;
     private MealRestController controller;
 
     @Override
@@ -37,6 +37,7 @@ public class MealServlet extends HttpServlet {
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             controller = appCtx.getBean(MealRestController.class);
+            user = new ProfileRestController().get(SecurityUtil.authUserId());
             controller.getAll(user.getId());
         }
         super.init(config);
