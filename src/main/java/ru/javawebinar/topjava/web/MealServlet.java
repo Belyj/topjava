@@ -37,7 +37,7 @@ public class MealServlet extends HttpServlet {
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             controller = appCtx.getBean(MealRestController.class);
-            user = new ProfileRestController().get(SecurityUtil.authUserId());
+            user = appCtx.getBean(ProfileRestController.class).get(SecurityUtil.authUserId());
             controller.getAll(user.getId());
         }
         super.init(config);
