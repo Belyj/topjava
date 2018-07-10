@@ -1,31 +1,37 @@
 package ru.javawebinar.topjava.util;
 
+import ru.javawebinar.topjava.to.MealWithExceed;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public static boolean isBetween(LocalTime lt, LocalTime startTime, LocalTime endTime) {
-        return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
-    }
+    public static List<MealWithExceed> isBetween(List<MealWithExceed> mealWithExceeds, String fromDate, String toDate, String fromTime, String toTime) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static boolean isFromTime(LocalTime lt, LocalTime startTime) {
-        return lt.compareTo(startTime) >= 0;
-    }
+        if (!fromDate.isEmpty()) {
+            mealWithExceeds = mealWithExceeds.stream().filter(x -> x.getDateTime().toLocalDate().compareTo(LocalDate.parse(fromDate, dateFormatter)) >= 0).collect(Collectors.toList());
+        }
 
-    public static boolean isToTime(LocalTime lt, LocalTime endTime) {
-        return lt.compareTo(endTime) <= 0;
-    }
+        if (!toDate.isEmpty()) {
+            mealWithExceeds = mealWithExceeds.stream().filter(x -> x.getDateTime().toLocalDate().compareTo(LocalDate.parse(toDate, dateFormatter)) <= 0).collect(Collectors.toList());
+        }
 
-    public static boolean isFromDate(LocalDate ld, LocalDate startDate) {
-        return ld.compareTo(startDate) >= 0;
-    }
+        if (!fromTime.isEmpty()) {
+            mealWithExceeds = mealWithExceeds.stream().filter(x -> x.getDateTime().toLocalTime().compareTo(LocalTime.parse(fromTime, timeFormatter)) >= 0).collect(Collectors.toList());
+        }
 
-    public static boolean isToDate(LocalDate ld, LocalDate endDate) {
-        return ld.compareTo(endDate) <= 0;
+        if (!toTime.isEmpty()) {
+            mealWithExceeds = mealWithExceeds.stream().filter(x -> x.getDateTime().toLocalTime().compareTo(LocalTime.parse(toTime, timeFormatter)) <= 0).collect(Collectors.toList());
+        }
+        return mealWithExceeds;
     }
 
     public static String toString(LocalDateTime ldt) {
