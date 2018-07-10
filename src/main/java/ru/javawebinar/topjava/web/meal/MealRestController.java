@@ -6,7 +6,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class MealRestController {
@@ -45,7 +44,7 @@ public class MealRestController {
         throw new NotFoundException(String.format("Meal with id = %s does not exist", mealId));
     }
 
-    public List<Meal> getAll(int userId) {
-        return service.getAll().stream().filter(x -> x.getUserId() == userId).collect(Collectors.toList());
+    public List<Meal> getAll() {
+        return service.getAll();
     }
 }

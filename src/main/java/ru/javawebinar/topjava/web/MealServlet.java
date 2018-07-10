@@ -17,15 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class MealServlet extends HttpServlet {
 
@@ -39,7 +35,7 @@ public class MealServlet extends HttpServlet {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             controller = appCtx.getBean(MealRestController.class);
             user = appCtx.getBean(ProfileRestController.class).get(SecurityUtil.authUserId());
-            controller.getAll(user.getId());
+            controller.getAll();
         }
         super.init(config);
     }
@@ -47,9 +43,9 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String button = request.getParameter("button");
+        String button = request.getParameter("Filter");
 
-        if ("button".equals(button)) {
+        if ("Filter".equals(button)) {
             log.info("buttonFilter");
             request.setAttribute("meals", buttonFilter(request.getParameter("fromDate"),
                                                        request.getParameter("toDate"),
@@ -64,7 +60,7 @@ public class MealServlet extends HttpServlet {
     }
 
     private List<MealWithExceed> buttonFilter(String fromDate, String toDate, String fromTime, String toTime) {
-        return DateTimeUtil.isBetween(MealsUtil.getWithExceeded(controller.getAll(user.getId()), MealsUtil.DEFAULT_CALORIES_PER_DAY),
+        return DateTimeUtil.isBetween(MealsUtil.getWithExceeded(controller.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY),
                                fromDate,
                                toDate,
                                fromTime,
@@ -93,7 +89,7 @@ public class MealServlet extends HttpServlet {
             case "all":
                 log.info("getAll");
                 request.setAttribute("meals",
-                                     MealsUtil.getWithExceeded(controller.getAll(user.getId()),
+                                     MealsUtil.getWithExceeded(controller.getAll(),
                                                                MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;

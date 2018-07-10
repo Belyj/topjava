@@ -28,11 +28,11 @@
             <h5>Date / Time Filter</h5>
         </div>
         <form action="${pageContext.request.contextPath}/meals" method="post">
-            <input data-inputmask="'mask': '9999-99-99'" name="fromDate" placeholder="From date: "/>
-            <input data-inputmask="'mask': '9999-99-99'" name="toDate" placeholder="To date: "/>
-            <input data-inputmask="'mask': '99:99'" name="fromTime" placeholder="From Time: "/>
-            <input data-inputmask="'mask': '99:99'" name="toTime" placeholder="To Time: "/>
-            <input class="button" type="submit" name="button" value="button">Filter</input>
+            <input type="date" name="fromDate" placeholder="From date: "/>
+            <input type="date" name="toDate" placeholder="To date: "/>
+            <input type="time" name="fromTime" placeholder="From Time: "/>
+            <input type="time" name="toTime" placeholder="To Time: "/>
+            <input class="button" type="submit" name="Filter" value="Filter"/>
         </form>
     </div>
     <a href="meals?action=create">Add Meal</a>
