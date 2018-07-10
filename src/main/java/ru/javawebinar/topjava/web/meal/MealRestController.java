@@ -17,11 +17,8 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Meal get(int id, int userId) {
-        if (service.get(id) != null && service.get(id).getUserId() == userId) {
+    public Meal get(int id) {
             return service.get(id);
-        }
-        throw new NotFoundException(String.format("Meal with id = %s does not exist", id));
     }
 
     public void save(Meal meal) {

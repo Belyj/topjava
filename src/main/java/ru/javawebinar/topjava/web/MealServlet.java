@@ -82,7 +82,7 @@ public class MealServlet extends HttpServlet {
                 controller.create(new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, user.getId()));
                 break;
             case "update":
-                Meal meal = controller.get(getId(request), user.getId());
+                Meal meal = controller.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
