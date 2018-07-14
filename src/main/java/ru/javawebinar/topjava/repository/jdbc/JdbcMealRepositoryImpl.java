@@ -14,6 +14,7 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +69,8 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT id, datetime, description, calories, userid FROM meals WHERE userid = ?", ROW_MAPPER, userId);
+        return jdbcTemplate.query("SELECT id, datetime, description, calories, userid FROM meals WHERE userid = ?", ROW_MAPPER, userId)
+                .stream().sorted(Comparator.comparing(Meal::getDateTime).reversed()).collect(Collectors.toList());
     }
 
     @Override
