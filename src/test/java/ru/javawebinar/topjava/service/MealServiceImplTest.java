@@ -14,6 +14,7 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -55,7 +56,7 @@ public class MealServiceImplTest {
 
     @Test
     public void getAll() {
-        service.getAll(SecurityUtil.authUserId()).forEach(x -> assertEquals(x.getUserId(), SecurityUtil.authUserId()));
+        assertTrue(MealTestData.containsAll(service.getAll(SecurityUtil.authUserId())));
     }
 
     @Test(expected = NotFoundException.class)
