@@ -51,10 +51,6 @@ public class MealServiceImplTest {
     }
 
     @Test
-    public void getBetweenDateTimes() {
-    }
-
-    @Test
     public void getAll() {
         assertTrue(MealTestData.containsAll(service.getAll(SecurityUtil.authUserId())));
     }
@@ -62,10 +58,5 @@ public class MealServiceImplTest {
     @Test(expected = NotFoundException.class)
     public void update() {
         service.update(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500, 100001), 100000);
-    }
-
-    @Test
-    public void create() {
-
     }
 }
