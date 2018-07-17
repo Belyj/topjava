@@ -63,6 +63,11 @@ public class MealServlet extends HttpServlet {
             LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
             request.setAttribute("meals", mealController.getBetween(startDate, startTime, endDate, endTime));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        } else if ("save".equals(action)) {
+            LocalDateTime localDateTime = LocalDateTime.parse(request.getParameter("dateTime"));
+            String description = request.getParameter("description");
+            int calories = Integer.parseInt(request.getParameter("calories"));
+            mealController.create(new Meal(localDateTime, description, calories, SecurityUtil.authUserId()));
         }
     }
 

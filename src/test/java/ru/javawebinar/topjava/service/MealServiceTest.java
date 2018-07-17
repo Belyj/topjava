@@ -8,13 +8,14 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -23,7 +24,7 @@ import static org.junit.Assert.*;
         "classpath:spring/spring-db.xml",
 })
 @RunWith(SpringRunner.class)
-public class MealServiceImplTest {
+public class MealServiceTest {
 
     static {
         SLF4JBridgeHandler.install();
@@ -42,12 +43,12 @@ public class MealServiceImplTest {
 
     @Test(expected = NotFoundException.class)
     public void get() {
-        service.get(1, 100001);
+        service.get(MealTestData.MEAL_1.getId(), UserTestData.ADMIN_ID);
     }
 
     @Test(expected = NotFoundException.class)
     public void delete() {
-        service.delete(1, 100001);
+        service.delete(MealTestData.MEAL_1.getId(), UserTestData.ADMIN_ID);
     }
 
     @Test
@@ -57,6 +58,6 @@ public class MealServiceImplTest {
 
     @Test(expected = NotFoundException.class)
     public void update() {
-        service.update(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500, 100001), 100000);
+        service.update(new Meal(MealTestData.MEAL_1.getId(), MealTestData.MEAL_1.getDateTime(), MealTestData.MEAL_1.getDescription(), MealTestData.MEAL_1.getCalories(), UserTestData.ADMIN_ID), UserTestData.USER_ID);
     }
 }
