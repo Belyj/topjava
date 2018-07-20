@@ -49,7 +49,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
             Number newKey = mealInsert.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
         } else if (namedParameterJdbcTemplate.update(
-                "UPDATE meals SET datetime=:datetime, description=:description, calories=:calories " +
+                "UPDATE public.meals SET datetime=:datetime, description=:description, calories=:calories " +
                         "WHERE id=:id AND userid=:userid", map) == 0) {
             return null;
         }
@@ -58,24 +58,24 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE from meals WHERE id = ? AND userid = ?", id, userId) != 0;
+        return jdbcTemplate.update("DELETE from public.meals WHERE id = ? AND userid = ?", id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = jdbcTemplate.query("SELECT id, datetime, description, calories, userid FROM meals WHERE id = ? AND userid = ?", ROW_MAPPER, id, userId);
+        List<Meal> meals = jdbcTemplate.query("SELECT id, datetime, description, calories, userid FROM public.meals WHERE id = ? AND userid = ?", ROW_MAPPER, id, userId);
         return DataAccessUtils.singleResult(meals);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT id, datetime, description, calories, userid FROM meals WHERE userid = ?", ROW_MAPPER, userId)
+        return jdbcTemplate.query("SELECT * FROM public.meals WHERE userid = ?", ROW_MAPPER, userId)
                 .stream().sorted(Comparator.comparing(Meal::getDateTime).reversed()).collect(Collectors.toList());
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        List<Meal> meals = jdbcTemplate.query("SELECT id, datetime, description, calories, userid FROM meals WHERE userid = ?", ROW_MAPPER, userId);
+        List<Meal> meals = jdbcTemplate.query("SELECT id, datetime, description, calories, userid FROM public.meals WHERE userid = ?", ROW_MAPPER, userId);
         return meals.stream().filter(x -> DateTimeUtil.isBetween(x.getDateTime(), startDate, endDate)).collect(Collectors.toList());
     }
 }
