@@ -1,16 +1,42 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.Range;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@NamedQueries(value = {
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user_id=:user_id"),
+        @NamedQuery(name = Meal.SAVE, query = "UPDATE Meal m " +
+                "SET m.description=:description, m.calories=:calories, m.date_time=:date_time " +
+                "WHERE m.id=:id AND m.user_id=:user_id"),
+        @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m WHERE m.id=:id AND m.user_id=:user_id"),
+        @NamedQuery(name = Meal.GET_ALL, query = "SELECT m FROM Meal m WHERE m.user_id"),
+        @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT m FROM Meal m WHERE m.user_id AND" +
+                " m.date_time BETWEEN ?1 AND ?2 ORDER BY m.date_time DESC"),
+})
+@Entity
+@NotBlank
 public class Meal extends AbstractBaseEntity {
+
+    public static final String DELETE = "Meal.delete";
+    public static final String SAVE = "Meal.save";
+    public static final String GET = "Meal.get";
+    public static final String GET_ALL = "Meal.getAll";
+    public static final String GET_BETWEEN = "Meal.getBetween";
+
+
+    @Column(name = "date_time", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "calories", nullable = false, columnDefinition = "INT")
+    @Range(max = 10000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
