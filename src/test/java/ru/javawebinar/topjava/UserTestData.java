@@ -26,4 +26,8 @@ public class UserTestData {
     public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "roles", "meals").isEqualTo(expected);
     }
+
+    public static void assertMatch(Role actual, Role expected) {
+        assertThat(actual).isEqualTo(expected);
+    }
 }
